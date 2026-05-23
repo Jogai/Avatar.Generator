@@ -1,0 +1,2 @@
+<svg width="$size" height="$size" viewBox="0 0 64 64"><g fill="none"><path fill="$fill" d="M28.25 34a.75.75 0 0 1 .75-.75h6a.75.75 0 0 1 .75.75c0 1.664-1.586 3.25-3.75 3.25-2.164 0-3.75-1.586-3.75-3.25z"/>
+  <path style="mix-blend-mode: overlay" fill="#fff" d="M35 33.25a.75.75 0 0 0-.75.75c0 .836-.914 1.75-2.25 1.75s-2.25-.914-2.25-1.75a.75.75 0 0 0-.75-.75v-.002h6z" opacity=".36"/></g></svg>
