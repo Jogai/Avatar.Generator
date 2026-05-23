@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      # Prerequisites for the Native AOT publish (see the API Dockerfile).
+      - name: Install Native AOT toolchain
+        run: sudo apt-get update && sudo apt-get install -y clang zlib1g-dev
+
+      - name: Restore
+        run: dotnet restore src/Scott.Avatar.Generator.slnx
+
+      - name: Build
+        run: dotnet build src/Scott.Avatar.Generator.slnx -c Release --no-restore
+
+      - name: Test
+        run: dotnet test src/Scott.Avatar.Generator.slnx -c Release --no-build --verbosity normal
+
+      # Exercise the toolchain so AOT/trim breakage fails CI, not the release build.
+      - name: Verify Native AOT publish (API)
+        run: dotnet publish src/Scott.Avatar.Generator.Api -c Release -r linux-x64 -o out/api-aot
+
+      - name: Verify self-contained single-file publish (CLI)
+        run: dotnet publish src/Scott.Avatar.Generator.Tool -c Release -r linux-x64 -o out/cli

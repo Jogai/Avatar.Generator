@@ -1,0 +1,72 @@
+name: Publish NuGet
+
+# Publishes the core library and the dotnet tool to nuget.org using NuGet
+# "trusted publishing" (OIDC) — no long-lived NUGET_API_KEY secret. A short-lived
+# key is minted per run by exchanging a GitHub OIDC token with nuget.org.
+#
+# One-time nuget.org setup (your username -> Trusted Publishing -> add policy):
+#   Repository Owner: <github-owner>
+#   Repository:       <repo-name>
+#   Workflow File:    publish-nuget.yml      (file name only, no path)
+#   Environment:      (leave empty — this workflow uses no GitHub environment)
+# Also add a repo/org Actions secret NUGET_USER = your nuget.org username (the
+# profile name, NOT your e-mail).
+#
+# Trigger by pushing a tag like `v1.0.0`, or run manually.
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Package version (overrides the csproj version)'
+        required: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write   # required to request the GitHub OIDC token
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Derive version
+        id: ver
+        run: |
+          if [ -n "${{ github.event.inputs.version }}" ]; then
+            echo "version=${{ github.event.inputs.version }}" >> "$GITHUB_OUTPUT"
+          elif [[ "${{ github.ref }}" == refs/tags/v* ]]; then
+            echo "version=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+          else
+            echo "version=" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Pack
+        run: |
+          ARGS="-c Release -o ${{ runner.temp }}/nupkg"
+          if [ -n "${{ steps.ver.outputs.version }}" ]; then
+            ARGS="$ARGS -p:Version=${{ steps.ver.outputs.version }}"
+          fi
+          dotnet pack src/Scott.Avatar.Generator/Scott.Avatar.Generator.csproj $ARGS
+          dotnet pack src/Scott.Avatar.Generator.Tool/Scott.Avatar.Generator.Tool.csproj $ARGS
+
+      # Mint a short-lived nuget.org API key from the GitHub OIDC token. Done right
+      # before the push because the key is valid for only one hour.
+      - name: NuGet login (OIDC → short-lived key)
+        uses: NuGet/login@v1
+        id: login
+        with:
+          user: ${{ secrets.NUGET_USER }}
+
+      - name: Push to nuget.org
+        run: |
+          dotnet nuget push "${{ runner.temp }}/nupkg/*.nupkg" \
+            --api-key "${{ steps.login.outputs.NUGET_API_KEY }}" \
+            --source https://api.nuget.org/v3/index.json \
+            --skip-duplicate
