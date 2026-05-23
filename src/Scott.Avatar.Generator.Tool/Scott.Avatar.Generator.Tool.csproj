@@ -1,0 +1,47 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+
+    <!-- Package metadata (shared by the dotnet-tool package) -->
+    <PackageId>Scott.Avatar.Generator.Tool</PackageId>
+    <Version>1.0.0</Version>
+    <Authors>Scott</Authors>
+    <Description>Command-line SVG avatar generator (ships the Personas set). Install with `dotnet tool install -g Scott.Avatar.Generator.Tool` and run `avatar`.</Description>
+    <PackageTags>avatar;svg;personas;cli;dotnet-tool</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://personas.draftbit.com</PackageProjectUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+
+  <!-- Default (no RID): a framework-dependent dotnet tool published to nuget.org. -->
+  <PropertyGroup Condition="'$(RuntimeIdentifier)' == ''">
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>avatar</ToolCommandName>
+  </PropertyGroup>
+
+  <!-- With a RID (e.g. `dotnet publish -r linux-x64 -c Release`): a self-contained,
+       trimmed, single-file `avatar` executable that needs no installed .NET runtime. -->
+  <PropertyGroup Condition="'$(RuntimeIdentifier)' != ''">
+    <SelfContained>true</SelfContained>
+    <PublishSingleFile>true</PublishSingleFile>
+    <PublishTrimmed>true</PublishTrimmed>
+    <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <AssemblyName>avatar</AssemblyName>
+    <DebugType>none</DebugType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="\" Condition="Exists('README.md')" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Scott.Avatar.Generator\Scott.Avatar.Generator.csproj" />
+  </ItemGroup>
+
+</Project>

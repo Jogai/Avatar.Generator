@@ -1,0 +1,41 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <!-- Surface trim/AOT issues at build time; the library is reflection-free. -->
+    <IsAotCompatible>true</IsAotCompatible>
+
+    <!-- NuGet package metadata -->
+    <PackageId>Scott.Avatar.Generator</PackageId>
+    <Version>1.0.0</Version>
+    <Authors>Scott</Authors>
+    <Description>A C# SVG avatar generator (a faithful port of Draftbit "Personas"). Ships the Personas set as editable SVGs and generates inclusive, layered avatars with no runtime dependencies.</Description>
+    <PackageTags>avatar;svg;personas;generator;placeholder;profile-picture</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/draftbit/avatar-generator</RepositoryUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageProjectUrl>https://personas.draftbit.com</PackageProjectUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- The "personas" set lives at the repo root in personas/: designer-owned SVG
+         fragments (personas/<Category>/<Name>.svg) plus its catalogue (config.json).
+         Both are embedded so the library stays self-contained at runtime. The Link
+         preserves the folder structure in the resource manifest name. -->
+    <EmbeddedResource Include="$(MSBuildProjectDirectory)/../../personas/**/*.svg">
+      <Link>personas/%(RecursiveDir)%(Filename)%(Extension)</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildProjectDirectory)/../../personas/config.json">
+      <Link>personas/config.json</Link>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="\" Condition="Exists('README.md')" />
+  </ItemGroup>
+
+</Project>

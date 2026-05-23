@@ -1,0 +1,9 @@
+# Keep the build context small. Only src/ and svg/ are needed by the Dockerfile.
+**/bin/
+**/obj/
+.git/
+.github/
+*.md
+**/*.user
+artifacts/
+*.nupkg

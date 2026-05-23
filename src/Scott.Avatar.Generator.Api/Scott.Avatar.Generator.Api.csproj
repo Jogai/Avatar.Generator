@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <InvariantGlobalization>true</InvariantGlobalization>
+
+    <!-- Native AOT: tiny, dependency-free native binary with fast cold start.
+         Enables the trim/AOT analyzers at build time; emits the native image on
+         `dotnet publish -r <rid>` (the Dockerfile does this). -->
+    <PublishAot>true</PublishAot>
+    <StripSymbols>true</StripSymbols>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Scott.Avatar.Generator\Scott.Avatar.Generator.csproj" />
+  </ItemGroup>
+
+</Project>

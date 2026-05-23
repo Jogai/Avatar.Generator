@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="Scott.Avatar.Generator.Api/Scott.Avatar.Generator.Api.csproj" />
+  <Project Path="Scott.Avatar.Generator.Tests/Scott.Avatar.Generator.Tests.csproj" />
+  <Project Path="Scott.Avatar.Generator.Tool/Scott.Avatar.Generator.Tool.csproj" />
+  <Project Path="Scott.Avatar.Generator/Scott.Avatar.Generator.csproj" />
+</Solution>
