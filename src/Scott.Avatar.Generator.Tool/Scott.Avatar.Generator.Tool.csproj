@@ -9,12 +9,13 @@
 
     <!-- Package metadata (shared by the dotnet-tool package) -->
     <PackageId>Scott.Avatar.Generator.Tool</PackageId>
-    <Version>1.0.0</Version>
-    <Authors>Scott</Authors>
+    <Version>0.0.3</Version>
+    <Authors>Jogai</Authors>
     <Description>Command-line SVG avatar generator (ships the Personas set). Install with `dotnet tool install -g Scott.Avatar.Generator.Tool` and run `avatar`.</Description>
     <PackageTags>avatar;svg;personas;cli;dotnet-tool</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://personas.draftbit.com</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/Jogai/Avatar.Generator</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Jogai/Avatar.Generator</RepositoryUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
